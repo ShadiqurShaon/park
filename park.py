@@ -1,5 +1,6 @@
 import pandas as pd
 import pandasql as ps
+import fastparquet
 import os
 # step1
 # import the dataset
@@ -26,14 +27,19 @@ parent_dir = "/home/sh-root/Desktop/practice/parque/ecommerce-data/"
 for index,item in date.iterrows():
     directory = item['date']
     path = os.path.join(parent_dir, directory) 
-    # os.mkdir(path)
+    os.mkdir(path)
     date_name = directory
     all_ochurance_in_a_day = 'select * from df where date = "'+date_name+'" limit 10'
     date_all = ps.sqldf(all_ochurance_in_a_day, globals())
-    print(date_all)
-    # put_file = path+'/'+date+".csv"
+    # print(date_all)
+
+    #for csv
+    # put_file = path+'/'+date_name+".csv"
+    #for perquite
+    put_per = path+'/'+date_name+'.parquet.gzip'
     # print(put_file)
     # date_all.to_csv(put_file,index = False,header = True)
+    date_all.to_parquet(put_per,compression='gzip') 
 
 print("ok")
 # print(df.head())  
