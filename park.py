@@ -15,7 +15,7 @@ df[['date']] = df.date.str.replace('/','-')
 
 # qu = "Select distinct(date) from df"
 # qu_by_date = "Select * from df where date = '12/1/2010'"
-all_distinct_date = "select distinct(date) from df limit 10"
+all_distinct_date = "select distinct(date) from df"
 # date = '12-1-2010';
 # all_ochurance_in_a_day = 'select * from df where date = "'+date+'"'
 
@@ -23,13 +23,13 @@ date = ps.sqldf(all_distinct_date, locals())
 # print(date_all)
 
 # make directory
-parent_dir = "/home/sh-root/Desktop/practice/parque/ecommerce-data/"
+parent_dir = "/home/sh-root/Desktop/practice/parque/result/"
 for index,item in date.iterrows():
     directory = item['date']
     path = os.path.join(parent_dir, directory) 
     os.mkdir(path)
     date_name = directory
-    all_ochurance_in_a_day = 'select * from df where date = "'+date_name+'" limit 10'
+    all_ochurance_in_a_day = 'select * from df where date = "'+date_name+'"'
     date_all = ps.sqldf(all_ochurance_in_a_day, globals())
 
     all_distinct_hour = 'select distinct(time) from date_all'
