@@ -3,28 +3,23 @@ import pandasql as ps
 import fastparquet
 import os
 
-# STEP 1
 # import the dataset
 df = pd.read_csv('./data.csv', encoding = 'unicode_escape')
 
-#STEP 2
 # split invoicedate column into seperate date and time
 df[["date","time"]] = df.InvoiceDate.str.split(' ',n=1,expand=True)
 
 #configure the date formate
 df[['date']] = df.date.str.replace('/','-')
 
-# STEP 3
 # Get all distinct date from the data set
 all_distinct_date = "select distinct(date) from df"
 all_distinct_date_df = ps.sqldf(all_distinct_date, locals())
 
-# STEP 4
 # Make parennt directory
 os.mkdir('result')
 parent_dir = 'result/'
 
-# STEP 5
 # Make all Directory by Date
 total = len(all_distinct_date_df.index)
 for index,item in all_distinct_date_df.iterrows():
@@ -41,7 +36,6 @@ for index,item in all_distinct_date_df.iterrows():
     all_distinct_hour_in_a_day = 'select distinct(time) from all_ochurance_in_a_day_df'
     all_distinct_hour_in_a_day_df = ps.sqldf(all_distinct_hour_in_a_day, globals())
     
-    #STEP 6
     #Make Dir with houre
     for index,val in all_distinct_hour_in_a_day_df.iterrows():
         hour_dir_name = val['time']
@@ -55,7 +49,6 @@ for index,item in all_distinct_date_df.iterrows():
         all_occurance_in_a_hour = "select * from all_ochurance_in_a_day_df where time = '"+hour_dir_name+"'"
         all_occurance_in_a_hour_df = ps.sqldf(all_occurance_in_a_hour, globals())
 
-        #STEP 7
         # Make perquite file nad put inside the hour folder
         put_per = time_dir_path+'/'+hour_dir_name+'.parquet.gzip'
         all_occurance_in_a_hour_df.to_parquet(put_per,compression='gzip')
