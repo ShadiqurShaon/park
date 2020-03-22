@@ -1,3 +1,0 @@
-
-docker build -t park .
-docker run --rm -it -v /home/sh-root/Desktop/practice/newapp:/app park
